@@ -12,6 +12,14 @@ const channelId = process.argv[3];
 console.log(guildId);
 console.log(channelId);
 
+function createIRCLog(messages) {
+  return messages.map((message) =>
+    message.content.split('\n').map((content) =>
+     `<${message.author.username}> ${content}`
+    ).join('\n')
+  ).join('\n');
+}
+
 redisBrain.get(`cardinal.${guildId}.channelbackup.${channelId}`, (err, text) => {
   if (err) {
     console.error('failed to retrieve messages');
@@ -22,15 +30,18 @@ redisBrain.get(`cardinal.${guildId}.channelbackup.${channelId}`, (err, text) => 
 
   const { avatars, messages, info } = JSON.parse(text);
   const baseFilenameOut = `channel_backup_${channelId}`
-  const filenameOut = `${baseFilenameOut}.html`;
 
   const jsonOut = `${baseFilenameOut}.json`;
   fs.writeFileSync(jsonOut, text);
 
+  const filenameOut = `${baseFilenameOut}.html`;
   const app = Index({ avatars, messages, info }).outerHTML;
   const output = `<!DOCTYPE html>\n${app}`;
-
   fs.writeFileSync(filenameOut, output);
+
+  const logFilenameOut = `${baseFilenameOut}.log`;
+  const log = createIRCLog(messages);
+  fs.writeFileSync(logFilenameOut, log);
 
   redisBrain.quit();
   console.log(`written to ${filenameOut}`);
