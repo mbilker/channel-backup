@@ -1,0 +1,23 @@
+{
+  "name": "channel-backup",
+  "version": "1.0.0",
+  "description": "Turns a JSON Discord channel backup from Cardinal and turns it into a webpage using React",
+  "main": "create_channel_backup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbilker/channel-backup.git"
+  },
+  "author": "Matt Bilker <me@mbilker.us>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mbilker/channel-backup/issues"
+  },
+  "homepage": "https://github.com/mbilker/channel-backup#readme",
+  "dependencies": {
+    "hyperscript": "^2.0.2",
+    "redis": "^2.6.3"
+  }
+}
