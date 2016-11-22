@@ -7,6 +7,8 @@ const redisBrain = Redis.createClient();
 
 const Index = require('./src/Index');
 
+const currentDiscordStylesheet = '1559544d86ab79d622a3';
+
 const guildId = process.argv[2];
 const channelId = process.argv[3];
 console.log(guildId);
@@ -35,7 +37,7 @@ redisBrain.get(`cardinal.${guildId}.channelbackup.${channelId}`, (err, text) => 
   fs.writeFileSync(jsonOut, text);
 
   const filenameOut = `${baseFilenameOut}.html`;
-  const app = Index({ avatars, messages, info }).outerHTML;
+  const app = Index(currentDiscordStylesheet, { avatars, messages, info }).outerHTML;
   const output = `<!DOCTYPE html>\n${app}`;
   fs.writeFileSync(filenameOut, output);
 
