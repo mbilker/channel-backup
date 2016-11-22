@@ -3,6 +3,7 @@
 const h = require('hyperscript');
 const linkify = require('linkifyjs/string');
 
+const Attachment = require('./Attachment');
 const Embed = require('./Embed');
 
 function textToLinks(content) {
@@ -19,11 +20,13 @@ function textToLinks(content) {
 }
 
 function MessageGroup({ message }) {
-  const embeds = message.embeds.map((embed) => Embed({ embed }));
   const contentNode = h('div.markup', message.content);
   contentNode.innerHTML = textToLinks(contentNode.innerHTML);
 
   const botTag = message.author.bot ? h('span.bot-tag', 'BOT') : null;
+
+  const attachments = message.attachments.map((attachment) => Attachment(attachment));
+  const embeds = message.embeds.map((embed) => Embed(embed));
 
   return h('div.message-group',
     h(`div.avatar-large.animate.avatar_${message.author.id}`),
@@ -38,7 +41,7 @@ function MessageGroup({ message }) {
           h('span.timestamp', message.timestamp)
         ),
         h('div.message-text', contentNode),
-        h('div.accessory', embeds)
+        h('div.accessory', message.attachments.length > 0 ? attachments : embeds)
       )
     )
   );
